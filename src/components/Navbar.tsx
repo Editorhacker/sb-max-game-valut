@@ -51,11 +51,7 @@ export function Navbar() {
                 <span className="text-xl font-black tracking-tight text-white group-hover:text-red-100 transition-colors">
                   SB-MAX
                 </span>
-                {/* Gold VIP Badge */}
-                {/* <span className="flex items-center gap-1 text-[10px] font-black uppercase tracking-wider px-1.5 py-0.5 rounded bg-gradient-to-r from-amber-500/20 via-yellow-500/20 to-amber-500/10 text-amber-300 border border-amber-400/40 shadow-sm shadow-amber-500/20">
-                  <Crown className="w-2.5 h-2.5 text-amber-400 fill-amber-400" />
-                  PRO
-                </span> */}
+               
               </div>
               <span className="text-[11px] font-extrabold tracking-[0.22em] text-red-500 uppercase mt-0.5">
                 GAME <span className="text-amber-400">VAULT</span>
