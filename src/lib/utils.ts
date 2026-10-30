@@ -8,12 +8,14 @@ export function cn(...inputs: ClassValue[]) {
 
 // Curated high-res artwork posters for games that don't have Steam library posters or for fallbacks
 const CUSTOM_COVERS: Record<string, string> = {
-  'ps5-astro-bot': 'https://image.api.playstation.com/vulcan/ap/rnd/202405/2814/232a514d2a1c43d3b769ea87cbe85b469490df111dfdb4f3.png',
+  'ps5-astro-bot': 'https://gmedia.playstation.com/is/image/SIEPDC/astro-bot-hero-desktop-01-en-23may24?$2400px$',
   'ps5-spider-man-2': 'https://image.api.playstation.com/vulcan/ap/rnd/202306/1219/60eca3ac155247e21850c7d075d01ebf0f3f5dbf19ccd2a1.jpg',
   'ps5-demons-souls': 'https://image.api.playstation.com/vulcan/img/rnd/202011/1717/GemRaOvdKzLp4rXj1uB0T6xQ.png',
-  'ps5-gran-turismo-7': 'https://image.api.playstation.com/vulcan/ap/rnd/202109/1321/yZ2Jy8T5K12G3T6M8s9f7D0v.png',
-  'ps4-bloodborne': 'https://image.api.playstation.com/vulcan/img/rnd/202010/2614/NVNmNmE9wB3i5u0N4c6Z5G4T.png',
-  'ps4-the-last-of-us-part-ii': 'https://image.api.playstation.com/vulcan/ap/rnd/202311/1717/04e9efda07e661bebe17bcab89ec329e71ecb15f0ebfc64e.png',
+  'ps5-gran-turismo-7': 'https://image.api.playstation.com/vulcan/ap/rnd/202511/0707/9e4e76f597c62f2591b312164ba164e04d2e96a016ec3208.jpg?w=940&thumb=false',
+  'ps4-bloodborne': 'https://image.api.playstation.com/vulcan/img/rnd/202010/2614/KKLEVc2SIIgrFVjsZChZJk1d.jpg?w=940&thumb=false',
+  'ps4-minecraft': 'https://image.api.playstation.com/gs2-sec/appkgo/prod/CUSA18797_00/4/i_ef3d4a1a539cc23669e31e597bdb5d56bc645ac6e2a824cfe6fb6ed61a7f13ee/i/icon0.png',
+  'ps5-ea-sports-fc-26': 'https://image.api.playstation.com/vulcan/ap/rnd/202608/0314/5217c783f0198d437a0e0e97848d0a3a61c4af84262fd5f2.png',
+  'ps4-last-of-us-part-2':'https://image.api.playstation.com/vulcan/ap/rnd/202312/0117/315718bce7eed62e3cf3fb02d61b81ff1782d6b6cf850fa4.png'
 };
 
 // Horizontal banner artwork (wide)
