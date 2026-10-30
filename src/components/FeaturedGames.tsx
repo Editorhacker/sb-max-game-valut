@@ -1,9 +1,9 @@
-import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Eye, Calendar, Sparkles, Crown } from 'lucide-react';
+import { Crown, Zap, Flame, ArrowUpRight } from 'lucide-react';
 import { games, featuredGameIds } from '../data/games';
 import type { Game } from '../types/game';
-import { getSteamImageUrl, getPlatformBadgeClass, getGenreGradient } from '../lib/utils';
+import { getGameHeaderUrl, getPlatformBadgeClass, getCafeRigInfo } from '../lib/utils';
+import { sfx } from '../lib/sound';
 
 interface FeaturedGamesProps {
   onGameClick: (game: Game) => void;
@@ -14,73 +14,109 @@ const featuredGames = featuredGameIds
   .filter(Boolean) as Game[];
 
 function FeaturedCard({ game, onClick, index }: { game: Game; onClick: (g: Game) => void; index: number }) {
-  const [imgError, setImgError] = useState(false);
-  const hasSteamImage = game.steamAppId !== null && !imgError;
+  const rigInfo = getCafeRigInfo(game);
 
   return (
     <motion.article
-      initial={{ opacity: 0, y: 30 }}
+      initial={{ opacity: 0, y: 35 }}
       whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, amount: 0.2 }}
+      viewport={{ once: true, amount: 0.15 }}
       transition={{ duration: 0.5, delay: index * 0.1 }}
-      whileHover={{ y: -6 }}
-      className="group relative rounded-2xl overflow-hidden cursor-pointer border border-white/10 hover:border-amber-400/50 transition-all duration-300 hover:shadow-xl hover:shadow-red-600/20 bg-[#12131b]"
-      onClick={() => onClick(game)}
+      onClick={() => {
+        sfx.playHoloOpen();
+        onClick(game);
+      }}
+      onMouseEnter={() => sfx.playHover()}
+      className="relative bg-[#0d0f1a] border border-white/10 hover:border-red-500/70 transition-all duration-300 flex flex-col group cursor-pointer overflow-hidden shadow-[0_10px_30px_rgba(0,0,0,0.6)] hover:shadow-[0_0_40px_rgba(232,25,44,0.3)] hover:-translate-y-1.5"
+      style={{
+        clipPath: 'polygon(0 0, calc(100% - 16px) 0, 100% 16px, 100% 100%, 16px 100%, 0 calc(100% - 16px))',
+      }}
     >
-      {/* Artwork */}
-      <div className="relative aspect-video overflow-hidden">
-        {hasSteamImage ? (
-          <img
-            src={getSteamImageUrl(game.steamAppId!)}
-            alt={game.title}
-            loading="lazy"
-            onError={() => setImgError(true)}
-            className="w-full h-full object-cover object-center transition-transform duration-500 group-hover:scale-110"
-            style={{ objectPosition: 'top center' }}
-          />
-        ) : (
-          <div className={`w-full h-full bg-gradient-to-br ${getGenreGradient(game.primaryGenre)}`} />
-        )}
+      {/* Artwork Banner Container - Clean and clear */}
+      <div className="relative h-48 sm:h-64 overflow-hidden bg-black/40">
+        <motion.img
+          src={getGameHeaderUrl(game)}
+          alt={game.title}
+          loading="lazy"
+          className="w-full h-full object-cover object-center filter contrast-110 group-hover:scale-108 transition-transform duration-700 ease-out"
+        />
 
-        {/* Overlay */}
-        <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0f] via-[#0a0a0f]/60 to-transparent" />
+        {/* Ambient bottom gradient so text below separates cleanly */}
+        <div className="absolute inset-0 bg-gradient-to-t from-[#0d0f1a] via-transparent to-black/30" />
 
-        {/* Top badges */}
-        <div className="absolute top-4 left-4 flex items-center gap-2">
+        {/* Top Badges */}
+        <div className="absolute top-3.5 left-3.5 flex items-center gap-2 z-10">
           <span
-            className={`px-2.5 py-1 rounded-lg text-xs font-bold border backdrop-blur-sm ${getPlatformBadgeClass(game.platform)}`}
+            className={`px-2.5 py-1 text-xs font-mono font-bold border backdrop-blur-md ${getPlatformBadgeClass(game.platform)}`}
+            style={{ clipPath: 'polygon(0 0, calc(100% - 4px) 0, 100% 4px, 100% 100%, 4px 100%, 0 calc(100% - 4px))' }}
           >
             {game.platform}
           </span>
-          <span className="px-2.5 py-1 rounded-lg text-xs font-semibold bg-black/60 text-gray-300 backdrop-blur-sm border border-white/10 flex items-center gap-1">
-            <Calendar className="w-3 h-3 text-amber-400" />
+          <span className="px-2 py-1 text-[11px] font-mono font-semibold bg-black/75 backdrop-blur-md text-amber-300 border border-amber-400/30">
             {game.releaseYear}
           </span>
         </div>
 
-        {/* Gold Featured badge */}
-        <div className="absolute top-4 right-4">
-          <span className="flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-extrabold bg-gradient-to-r from-amber-500/25 via-yellow-500/20 to-amber-500/10 text-amber-300 border border-amber-400/40 backdrop-blur-md shadow-sm shadow-amber-500/20">
-            <Sparkles className="w-3 h-3 text-amber-300" />
-            Featured
+        {/* Crown Badge */}
+        <div className="absolute top-3.5 right-3.5 z-10">
+          <span className="flex items-center gap-1.5 px-2.5 py-1 text-xs font-mono font-bold bg-red-600/90 text-white shadow-[0_0_15px_rgba(232,25,44,0.6)]">
+            <Crown className="w-3.5 h-3.5 fill-amber-300 text-amber-300" />
+            TOP CAFE PICK
           </span>
         </div>
 
-        {/* Bottom content */}
-        <div className="absolute bottom-0 left-0 right-0 p-5">
-          <span className="text-xs text-red-400/90 font-semibold mb-1 block uppercase tracking-wider">
-            {game.primaryGenre}
+        {/* Cafe Rig Target Overlay on image bottom right */}
+        <div className="absolute bottom-3 right-3 z-10">
+          <span className="px-2.5 py-1 text-[10px] font-mono font-bold bg-black/85 backdrop-blur-md text-emerald-400 border border-emerald-500/40 flex items-center gap-1">
+            <Zap className="w-3 h-3 fill-emerald-400" />
+            {rigInfo.fps}
           </span>
-          <h3 className="text-xl font-black text-white leading-tight mb-2 group-hover:text-amber-300 transition-colors">
+        </div>
+      </div>
+
+      {/* Content Section - Placed Below Image, No text collisions! */}
+      <div className="p-5 flex flex-col flex-1 justify-between gap-3">
+        <div>
+          <div className="flex items-center justify-between mb-1.5">
+            <span className="font-mono text-[11px] font-bold tracking-widest text-red-500 uppercase">
+              {game.primaryGenre}
+            </span>
+            <span className="font-mono text-[11px] text-zinc-400">
+              {rigInfo.rigName}
+            </span>
+          </div>
+
+          <h3 className="font-display text-2xl font-black italic uppercase text-white tracking-wide group-hover:text-red-400 transition-colors line-clamp-1">
             {game.title}
           </h3>
-          <p className="text-sm text-gray-400 line-clamp-2 mb-4 leading-relaxed">{game.description}</p>
+
+          <p className="text-xs text-zinc-400 line-clamp-2 mt-1 leading-relaxed">
+            {game.description}
+          </p>
+        </div>
+
+        {/* Action Row */}
+        <div className="pt-3 border-t border-white/10 flex items-center justify-between gap-2">
+          <div className="flex items-center gap-1 text-[11px] font-mono text-zinc-400">
+            <span className="w-2 h-2 rounded-full bg-emerald-500" />
+            <span>Installed & Ready</span>
+          </div>
+
           <button
-            onClick={(e) => { e.stopPropagation(); onClick(game); }}
-            className="flex items-center gap-2 px-4 py-2 rounded-xl bg-white/10 hover:bg-gradient-to-r hover:from-red-600/30 hover:to-amber-500/30 border border-white/10 hover:border-amber-400/40 text-white hover:text-amber-300 text-sm font-semibold transition-all duration-200"
+            onClick={(e) => {
+              e.stopPropagation();
+              sfx.playLockSuccess();
+              onClick(game);
+            }}
+            onMouseEnter={() => sfx.playHover()}
+            className="px-4 py-2 bg-red-600 hover:bg-red-500 text-white font-display text-xs font-black italic uppercase tracking-wider flex items-center gap-1.5 transition-all shadow-[0_0_15px_rgba(232,25,44,0.4)] group-hover:shadow-[0_0_25px_rgba(232,25,44,0.7)]"
+            style={{
+              clipPath: 'polygon(0 0, calc(100% - 6px) 0, 100% 6px, 100% 100%, 6px 100%, 0 calc(100% - 6px))',
+            }}
           >
-            <Eye className="w-4 h-4 text-amber-400" />
-            View Details
+            <Zap className="w-3.5 h-3.5 fill-white" />
+            <span>BOOK RIG</span>
+            <ArrowUpRight className="w-3.5 h-3.5" />
           </button>
         </div>
       </div>
@@ -90,28 +126,29 @@ function FeaturedCard({ game, onClick, index }: { game: Game; onClick: (g: Game)
 
 export function FeaturedGames({ onGameClick }: FeaturedGamesProps) {
   return (
-    <section id="featured" className="py-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-        transition={{ duration: 0.5 }}
-        className="flex items-center gap-4 mb-10"
-      >
-        <div>
-          <div className="flex items-center gap-2 mb-1">
-            <span className="w-1.5 h-6 rounded-full bg-gradient-to-b from-amber-400 to-red-600 shadow-sm shadow-amber-400" />
-            <span className="text-amber-400 text-xs font-extrabold uppercase tracking-widest flex items-center gap-1.5">
-              <Crown className="w-3.5 h-3.5 fill-amber-400" />
-              Vault Highlights
-            </span>
-          </div>
-          <h2 className="text-3xl font-black text-white">Must-Play Games</h2>
-          <p className="text-gray-400 text-sm mt-1">Hand-picked iconic titles curated for the SB-MAX Vault.</p>
-        </div>
-      </motion.div>
+    <section id="featured" className="py-14 sm:py-20 px-3 sm:px-6 lg:px-8 max-w-7xl mx-auto relative overflow-hidden">
+      {/* Background glow */}
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[400px] bg-red-600/10 rounded-full blur-[160px] pointer-events-none" />
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      {/* Section Header */}
+      <div className="mb-8 sm:mb-12">
+        <div className="flex items-center gap-2 mb-2">
+          <span className="w-8 h-0.5 bg-red-600 shadow-[0_0_8px_#e8192c]" />
+          <span className="font-mono text-[11px] sm:text-xs font-bold tracking-widest text-red-500 uppercase flex items-center gap-1.5">
+            <Flame className="w-3.5 h-3.5 fill-red-500" />
+            HIGH-DEMAND TITLES
+          </span>
+        </div>
+        <h2 className="font-display text-3xl min-[420px]:text-4xl sm:text-5xl lg:text-6xl font-black italic uppercase text-white tracking-tight leading-none mb-2 sm:mb-3">
+          MUST-PLAY <span className="text-red-500">EXPERIENCES</span>
+        </h2>
+        <p className="text-zinc-400 text-sm sm:text-base max-w-xl">
+          Pre-installed and optimized with custom ultra graphics profiles on our RTX 4090 and PS5 Pro battle stations.
+        </p>
+      </div>
+
+      {/* Cards Grid */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-7">
         {featuredGames.map((game, i) => (
           <FeaturedCard key={game.id} game={game} onClick={onGameClick} index={i} />
         ))}
