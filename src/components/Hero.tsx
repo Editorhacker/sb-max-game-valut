@@ -1,14 +1,9 @@
 import { useState, useEffect, useRef } from 'react';
 import { motion, useMotionValue, useTransform } from 'framer-motion';
-import { Search, Zap, Gamepad2, Monitor, ShieldCheck, Flame, Sparkles, Trophy } from 'lucide-react';
-import { sfx } from '../lib/sound';
+import {  ShieldCheck, Flame, Sparkles,  } from 'lucide-react';
 import { games } from '../data/games';
 
-interface HeroProps {
-  searchValue: string;
-  onSearchChange: (value: string) => void;
-  onQuickBookRig?: (platform: string, duration: string) => void;
-}
+
 
 const LIVE_ACTIVITIES = [
   { user: 'Viper_99', action: 'Locked Rig #07 (RTX 4090)', time: '2m ago' },
@@ -17,10 +12,8 @@ const LIVE_ACTIVITIES = [
   { user: 'SquadZero', action: '5v5 CS2 LAN match started', time: '18m ago' },
 ];
 
-export function Hero({ searchValue, onSearchChange, onQuickBookRig }: HeroProps) {
+export function Hero( ) {
   const containerRef = useRef<HTMLElement>(null);
-  const [selectedStation, setSelectedStation] = useState<'PC' | 'PS5' | 'SIM'>('PC');
-  const [selectedDuration, setSelectedDuration] = useState<'1hr' | '3hr' | 'night'>('3hr');
   const [tickerIndex, setTickerIndex] = useState(0);
 
   // 3D Parallax mouse tracking
@@ -57,15 +50,7 @@ export function Hero({ searchValue, onSearchChange, onQuickBookRig }: HeroProps)
     return () => clearInterval(timer);
   }, []);
 
-  const handleBookClick = () => {
-    sfx.playLockSuccess();
-    if (onQuickBookRig) {
-      onQuickBookRig(selectedStation, selectedDuration);
-    } else {
-      const exploreElem = document.getElementById('stations');
-      exploreElem?.scrollIntoView({ behavior: 'smooth' });
-    }
-  };
+ 
 
   return (
     <section
@@ -199,127 +184,7 @@ export function Hero({ searchValue, onSearchChange, onQuickBookRig }: HeroProps)
             </motion.p>
 
             {/* Quick Interactive Station Booker Card */}
-            <motion.div
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.6, delay: 0.35 }}
-              className="p-4 sm:p-6 bg-[#0d0f1a]/95 backdrop-blur-2xl border border-red-500/30 shadow-[0_0_40px_rgba(232,25,44,0.15)] relative overflow-hidden group"
-              style={{
-                clipPath: 'polygon(0 0, calc(100% - 14px) 0, 100% 14px, 100% 100%, 14px 100%, 0 calc(100% - 14px))',
-              }}
-            >
-              {/* Corner accent glow */}
-              <div className="absolute top-0 right-0 w-24 h-24 bg-red-600/20 rounded-full blur-2xl pointer-events-none" />
-
-              <div className="flex items-center justify-between mb-3 sm:mb-4 pb-2.5 sm:pb-3 border-b border-white/10">
-                <div className="flex items-center gap-1.5 sm:gap-2">
-                  <Zap className="w-4 h-4 text-red-500 fill-red-500 flex-shrink-0" />
-                  <span className="font-display text-xs sm:text-sm font-black italic tracking-wider text-white uppercase truncate">
-                    INSTANT RIG LOCK // NO WAIT
-                  </span>
-                </div>
-                <span className="font-mono text-[11px] sm:text-xs text-emerald-400 flex items-center gap-1.5 flex-shrink-0">
-                  <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping" />
-                  6 Ready
-                </span>
-              </div>
-
-              {/* Station Selectors - Responsive grid */}
-              <div className="grid grid-cols-1 min-[420px]:grid-cols-3 gap-2 mb-3 sm:mb-4">
-                {[
-                  { id: 'PC', label: 'RTX 4090 PC', icon: Monitor, sub: '360Hz OLED' },
-                  { id: 'PS5', label: 'PS5 PRO POD', icon: Gamepad2, sub: '65" 4K BRAVIA' },
-                  { id: 'SIM', label: 'RACING COCKPIT', icon: Trophy, sub: 'Direct Drive' },
-                ].map((station) => {
-                  const Icon = station.icon;
-                  const isSelected = selectedStation === station.id;
-                  return (
-                    <button
-                      key={station.id}
-                      onClick={() => {
-                        sfx.playClick();
-                        setSelectedStation(station.id as 'PC' | 'PS5' | 'SIM');
-                      }}
-                      onMouseEnter={() => sfx.playHover()}
-                      className={`p-2.5 sm:p-2.5 text-left transition-all border ${
-                        isSelected
-                          ? 'bg-red-600 text-white border-red-500 shadow-[0_0_20px_rgba(232,25,44,0.5)]'
-                          : 'bg-white/5 text-zinc-400 border-white/10 hover:border-white/30 hover:text-white'
-                      }`}
-                      style={{
-                        clipPath: 'polygon(0 0, calc(100% - 6px) 0, 100% 6px, 100% 100%, 6px 100%, 0 calc(100% - 6px))',
-                      }}
-                    >
-                      <div className="flex items-center gap-1.5 mb-0.5 sm:mb-1">
-                        <Icon className={`w-3.5 h-3.5 flex-shrink-0 ${isSelected ? 'text-white' : 'text-red-400'}`} />
-                        <span className="font-display text-xs font-black italic uppercase leading-none truncate">
-                          {station.label}
-                        </span>
-                      </div>
-                      <span className={`text-[10px] font-mono block ${isSelected ? 'text-white/80' : 'text-zinc-500'} truncate`}>
-                        {station.sub}
-                      </span>
-                    </button>
-                  );
-                })}
-              </div>
-
-              {/* Duration Pass Selectors */}
-              <div className="grid grid-cols-3 gap-1.5 sm:gap-2 mb-3 sm:mb-4">
-                {[
-                  { id: '1hr', label: '1 Hour', price: '$5' },
-                  { id: '3hr', label: '3 Hours', price: '$12', popular: true },
-                  { id: 'night', label: 'All-Night', price: '$25' },
-                ].map((dur) => (
-                  <button
-                    key={dur.id}
-                    onClick={() => {
-                      sfx.playTab();
-                      setSelectedDuration(dur.id as '1hr' | '3hr' | 'night');
-                    }}
-                    onMouseEnter={() => sfx.playHover()}
-                    className={`py-1.5 sm:py-2 px-1 text-center border text-[11px] sm:text-xs font-mono transition-all relative ${
-                      selectedDuration === dur.id
-                        ? 'border-amber-400 text-amber-300 bg-amber-500/20 font-bold shadow-[0_0_12px_rgba(255,215,0,0.25)]'
-                        : 'border-white/10 text-zinc-400 hover:text-white'
-                    }`}
-                  >
-                    {dur.popular && (
-                      <span className="hidden min-[400px]:inline-block absolute -top-2 left-1/2 -translate-x-1/2 px-1 text-[7px] sm:text-[8px] bg-red-600 text-white font-bold uppercase tracking-wider">
-                        POPULAR
-                      </span>
-                    )}
-                    <span>{dur.label}</span> <strong className="text-white ml-0.5 sm:ml-1">{dur.price}</strong>
-                  </button>
-                ))}
-              </div>
-
-              {/* Search Game or Lock Rig */}
-              <div className="flex flex-col sm:flex-row gap-2.5 sm:gap-3">
-                <div className="relative flex-1">
-                  <Search className="w-4 h-4 text-zinc-500 absolute left-3.5 top-1/2 -translate-y-1/2" />
-                  <input
-                    type="text"
-                    value={searchValue}
-                    onChange={(e) => onSearchChange(e.target.value)}
-                    placeholder="Search 30+ games (e.g. Elden Ring, CS2)..."
-                    className="w-full pl-9 pr-4 py-2.5 sm:py-3 bg-black/60 border border-white/15 text-xs sm:text-sm text-white placeholder-zinc-500 focus:outline-none focus:border-red-500 focus:ring-1 focus:ring-red-500 transition-all font-mono"
-                  />
-                </div>
-
-                <button
-                  onClick={handleBookClick}
-                  onMouseEnter={() => sfx.playHover()}
-                  className="w-full sm:w-auto px-5 sm:px-6 py-3 bg-gradient-to-r from-red-600 to-red-700 hover:from-red-500 hover:to-red-600 text-white font-display text-sm sm:text-base font-black italic tracking-widest uppercase flex items-center justify-center gap-2 transition-all shadow-[0_0_25px_rgba(232,25,44,0.5)] active:scale-95"
-                  style={{
-                    clipPath: 'polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 8px 100%, 0 calc(100% - 8px))',
-                  }}
-                >
-                  <Zap className="w-4 h-4 fill-white" />
-                  <span>LOCK IN STATION</span>
-                </button>
-              </div>
-            </motion.div>
+            
 
             {/* Quick stats below hero */}
             <div className="mt-6 sm:mt-8 grid grid-cols-3 gap-2 sm:gap-4 pt-4 sm:pt-6 border-t border-white/10 text-center sm:text-left">

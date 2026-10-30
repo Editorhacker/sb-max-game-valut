@@ -1,7 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import { Navbar } from './components/Navbar';
 import { Hero } from './components/Hero';
-import { BattleStations } from './components/BattleStations';
 import { PlatformSelector } from './components/PlatformSelector';
 import { GameFilters } from './components/GameFilters';
 import { GameGrid } from './components/GameGrid';
@@ -52,17 +51,7 @@ function App() {
       <Navbar onQuickBook={() => handleQuickBookStation('PC Titan')} />
 
       {/* Cyber Samurai Hero with 3D parallax & live station lock */}
-      <Hero
-        searchValue={filters.search}
-        onSearchChange={(v) => updateFilter('search', v)}
-        onQuickBookRig={() => handleQuickBookStation('PC Titan')}
-      />
-
-      {/* Dedicated Gaming Cafe Battle Stations & Hardware Specs */}
-      <BattleStations onSelectStation={handleQuickBookStation} />
-
-      {/* High-Octane Featured Games */}
-      <FeaturedGames onGameClick={openGame} />
+      <Hero/>
 
       {/* Explore Vault Section */}
       <section id="explore" className="py-14 sm:py-20 px-3 sm:px-6 lg:px-8 max-w-7xl mx-auto relative overflow-hidden">
@@ -134,6 +123,9 @@ function App() {
         {/* Game grid */}
         <GameGrid games={filteredGames} onGameClick={openGame} />
       </section>
+      {/* High-Octane Featured Games */}
+      <FeaturedGames onGameClick={openGame} />
+
 
       {/* Footer */}
       <Footer />

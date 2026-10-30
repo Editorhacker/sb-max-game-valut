@@ -11,11 +11,10 @@ const defaultFilters: FilterState = {
 };
 
 const PLAYER_MODE_GROUPS: Record<string, string[]> = {
-  'Single-player': ['Single-player'],
-  'Local multiplayer': ['Local multiplayer', 'Local PvP'],
-  'Local co-op': ['Local co-op'],
-  'Online multiplayer': ['Online multiplayer', 'Team-based multiplayer', 'Online PvP'],
-  'Online co-op': ['Online co-op'],
+  'Single-player': ['single-player'],
+  'Co-op': ['co-op', 'cooperative'],
+  'Online multiplayer': ['online multiplayer', 'team-based', 'online pvp', 'moba'],
+  'Local multiplayer': ['local multiplayer', 'local pvp', 'local co-op'],
 };
 
 export function useGameFilters() {
@@ -29,33 +28,51 @@ export function useGameFilters() {
       result = result.filter((g) => g.platform === (filters.platform as Platform));
     }
 
-    // Search filter (title, genre, developer, publisher, tags)
+    // Comprehensive Search filter (title, primaryGenre, genres, developer, publisher, platform, year, tags)
     if (filters.search.trim()) {
       const q = filters.search.toLowerCase().trim();
       result = result.filter(
         (g) =>
           g.title.toLowerCase().includes(q) ||
+          g.primaryGenre.toLowerCase().includes(q) ||
           g.genres.some((genre) => genre.toLowerCase().includes(q)) ||
           g.developer.toLowerCase().includes(q) ||
           g.publisher.toLowerCase().includes(q) ||
+          g.platform.toLowerCase().includes(q) ||
+          g.releaseYear.toString().includes(q) ||
           g.tags.some((tag) => tag.toLowerCase().includes(q))
       );
     }
 
-    // Genre filter
+    // Flexible Genre filter (matches primary genre and genres array)
     if (filters.genre) {
-      result = result.filter((g) =>
-        g.genres.some(
-          (genre) => genre.toLowerCase() === filters.genre.toLowerCase()
-        )
-      );
+      const gQuery = filters.genre.toLowerCase();
+      result = result.filter((g) => {
+        const matchesPrimary = g.primaryGenre.toLowerCase().includes(gQuery);
+        const matchesGenres = g.genres.some((genre) => {
+          const lGenre = genre.toLowerCase();
+          return lGenre === gQuery || lGenre.includes(gQuery) || gQuery.includes(lGenre);
+        });
+        if (gQuery === 'rpg') {
+          return (
+            matchesPrimary ||
+            matchesGenres ||
+            g.primaryGenre.toLowerCase().includes('role-playing') ||
+            g.genres.some((gen) => gen.toLowerCase().includes('role-playing'))
+          );
+        }
+        return matchesPrimary || matchesGenres;
+      });
     }
 
-    // Player mode filter
+    // Player mode filter with broad matching
     if (filters.playerMode) {
-      const matchModes = PLAYER_MODE_GROUPS[filters.playerMode] ?? [filters.playerMode];
+      const modeQuery = filters.playerMode.toLowerCase();
+      const matchTargets = PLAYER_MODE_GROUPS[filters.playerMode] ?? [modeQuery];
       result = result.filter((g) =>
-        g.modes.some((m) => matchModes.includes(m))
+        g.modes.some((m) =>
+          matchTargets.some((target) => m.toLowerCase().includes(target))
+        )
       );
     }
 

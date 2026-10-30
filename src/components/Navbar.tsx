@@ -4,13 +4,11 @@ import { Menu, X, Zap, Volume2, VolumeX } from 'lucide-react';
 import { sfx } from '../lib/sound';
 
 const navLinks = [
-  { label: 'Arena', href: '#home' },
-  { label: 'Battle Rigs', href: '#stations' },
-  { label: 'Must-Play', href: '#featured' },
   { label: 'Explore Vault', href: '#explore' },
+  { label: 'Must-Play', href: '#featured' },
 ];
 
-export function Navbar({ onQuickBook }: { onQuickBook?: () => void }) {
+export function Navbar({ onQuickBook: _onQuickBook }: { onQuickBook?: () => void } = {}) {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [isMuted, setIsMuted] = useState(sfx.getMuted());
@@ -86,18 +84,6 @@ export function Navbar({ onQuickBook }: { onQuickBook?: () => void }) {
             </div>
           </a>
 
-          {/* Live Arena Status pill (Desktop only) */}
-          <div className="hidden lg:flex items-center gap-2 px-3 py-1.5 bg-[#0d0f1a]/80 border border-white/10 rounded-full text-xs">
-            <span className="relative flex h-2 w-2">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
-              <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500" />
-            </span>
-            <span className="font-mono text-zinc-300">
-              ARENA: <strong className="text-emerald-400">18 / 24</strong> RIGS ACTIVE
-            </span>
-            <span className="text-zinc-600">|</span>
-            <span className="font-mono text-amber-400 text-[11px]">6 OPEN SEATS</span>
-          </div>
 
           {/* Desktop Nav Links */}
           <div className="hidden md:flex items-center gap-1">
@@ -145,14 +131,11 @@ export function Navbar({ onQuickBook }: { onQuickBook?: () => void }) {
               )}
             </button>
 
-            {/* Quick Book Rig button */}
+            {/* Explore button */}
             <a
-              href="#stations"
+              href="/#explore"
               onMouseEnter={() => sfx.playHover()}
-              onClick={() => {
-                sfx.playClick();
-                if (onQuickBook) onQuickBook();
-              }}
+              onClick={() => sfx.playClick()}
               className="hidden sm:inline-flex items-center gap-2 px-4 sm:px-5 py-2 sm:py-2.5 font-display text-xs sm:text-sm font-black italic tracking-widest text-white uppercase transition-all duration-300 group"
               style={{
                 background: 'linear-gradient(135deg, #e8192c 0%, #b80018 100%)',
@@ -161,7 +144,7 @@ export function Navbar({ onQuickBook }: { onQuickBook?: () => void }) {
               }}
             >
               <Zap className="w-3.5 h-3.5 fill-white group-hover:scale-125 transition-transform" />
-              <span>BOOK RIG</span>
+              <span>EXPLORE</span>
             </a>
 
             {/* Mobile menu hamburger button */}
@@ -197,14 +180,6 @@ export function Navbar({ onQuickBook }: { onQuickBook?: () => void }) {
               exit={{ opacity: 0, height: 0 }}
               className="md:hidden relative z-50 bg-[#090b14] border-b border-red-500/30 px-5 py-5 shadow-2xl"
             >
-              {/* Mobile Arena Status Pill */}
-              <div className="flex items-center justify-between p-3 bg-black/60 border border-white/10 mb-4 rounded">
-                <div className="flex items-center gap-2">
-                  <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping" />
-                  <span className="font-mono text-xs text-zinc-300">ARENA STATUS</span>
-                </div>
-                <span className="font-mono text-xs text-emerald-400 font-bold">18/24 ACTIVE (6 OPEN)</span>
-              </div>
 
               <div className="flex flex-col gap-2">
                 {navLinks.map((link) => (
@@ -222,11 +197,10 @@ export function Navbar({ onQuickBook }: { onQuickBook?: () => void }) {
                 ))}
 
                 <a
-                  href="#stations"
+                  href="/#explore"
                   onClick={() => {
                     sfx.playClick();
                     setMobileOpen(false);
-                    if (onQuickBook) onQuickBook();
                   }}
                   className="mt-3 flex items-center justify-center gap-2 py-3.5 bg-red-600 hover:bg-red-500 text-white font-display text-base font-black italic uppercase tracking-wider shadow-[0_0_20px_rgba(232,25,44,0.5)]"
                   style={{
@@ -234,7 +208,7 @@ export function Navbar({ onQuickBook }: { onQuickBook?: () => void }) {
                   }}
                 >
                   <Zap className="w-4 h-4 fill-white" />
-                  BOOK BATTLE RIG NOW
+                  EXPLORE
                 </a>
               </div>
             </motion.div>
