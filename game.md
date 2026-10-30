@@ -1,0 +1,525 @@
+# Game Catalogue Seed Data
+
+This file is the content source of truth for the single-page game discovery website. It contains 30 curated titles: 10 entries per platform (PS5, PS4, PC). The catalogue is intentionally varied across genres.
+
+## Data notes
+
+- `platform` is the catalogue category, not a claim that the game is exclusive to that platform.
+- `players` describes the main supported player modes. Multiplayer availability can depend on the edition, game mode, network subscription, and platform version; show this wording as supplied rather than converting it into a guessed number.
+- No prices, review scores, age ratings, or live availability are included because those vary by region and change over time.
+- `steamAppId` is provided only when a Steam listing is known. It can be used to build a Steam CDN cover image URL; check that the image loads and provide a designed fallback when it does not.
+- Descriptions are original short summaries for this demo catalogue, not official marketing copy.
+
+## Game data
+
+```json
+[
+  {
+    "id": "ps5-astro-bot",
+    "title": "Astro Bot",
+    "platform": "PS5",
+    "primaryGenre": "Platformer",
+    "genres": ["Platformer", "Adventure", "Family-friendly"],
+    "releaseYear": 2024,
+    "developer": "Team Asobi",
+    "publisher": "Sony Interactive Entertainment",
+    "players": "1 player; single-player only",
+    "modes": ["Single-player"],
+    "description": "Join Astro on a colourful 3D platforming adventure across imaginative worlds, collecting hidden bots and using playful abilities to overcome inventive challenges.",
+    "highlights": ["Creative platforming and level design", "Playful abilities and secrets", "A polished showcase for PS5 features"],
+    "tags": ["3D platformer", "Collectathon", "Single-player"],
+    "steamAppId": null
+  },
+  {
+    "id": "ps5-god-of-war-ragnarok",
+    "title": "God of War Ragnarök",
+    "platform": "PS5",
+    "primaryGenre": "Action-adventure",
+    "genres": ["Action-adventure", "Action", "Mythology"],
+    "releaseYear": 2022,
+    "developer": "Santa Monica Studio",
+    "publisher": "Sony Interactive Entertainment",
+    "players": "1 player; single-player only",
+    "modes": ["Single-player"],
+    "description": "Follow Kratos and Atreus through the Norse realms as they face difficult choices, powerful enemies, and the events surrounding Ragnarök.",
+    "highlights": ["Cinematic story and character-driven quests", "Weighty close-range combat", "Exploration across distinct Norse realms"],
+    "tags": ["Story-rich", "Combat", "Norse mythology"],
+    "steamAppId": 2322010
+  },
+  {
+    "id": "ps5-spider-man-2",
+    "title": "Marvel's Spider-Man 2",
+    "platform": "PS5",
+    "primaryGenre": "Action-adventure",
+    "genres": ["Action-adventure", "Open-world", "Superhero"],
+    "releaseYear": 2023,
+    "developer": "Insomniac Games",
+    "publisher": "Sony Interactive Entertainment",
+    "players": "1 player; single-player only",
+    "modes": ["Single-player"],
+    "description": "Swing through an expanded New York as Peter Parker and Miles Morales, switching between two Spider-Men while taking on new threats.",
+    "highlights": ["Two playable Spider-Men", "Fast web-swinging traversal", "Open-world missions and cinematic action"],
+    "tags": ["Open world", "Superhero", "Story-rich"],
+    "steamAppId": 2651280
+  },
+  {
+    "id": "ps5-elden-ring",
+    "title": "Elden Ring",
+    "platform": "PS5",
+    "primaryGenre": "Action RPG",
+    "genres": ["Action RPG", "Soulslike", "Open-world", "Fantasy"],
+    "releaseYear": 2022,
+    "developer": "FromSoftware",
+    "publisher": "Bandai Namco Entertainment",
+    "players": "Solo play with optional online co-op and player-versus-player features",
+    "modes": ["Single-player", "Online co-op", "Online PvP"],
+    "description": "Explore the vast Lands Between, build a custom character, uncover ancient mysteries, and face demanding enemies in a dark fantasy action RPG.",
+    "highlights": ["Large interconnected open world", "Flexible character builds and equipment", "Challenging boss encounters"],
+    "tags": ["Dark fantasy", "Exploration", "Difficult combat"],
+    "steamAppId": 1245620
+  },
+  {
+    "id": "ps5-ff7-rebirth",
+    "title": "Final Fantasy VII Rebirth",
+    "platform": "PS5",
+    "primaryGenre": "JRPG",
+    "genres": ["JRPG", "Role-playing", "Adventure", "Fantasy"],
+    "releaseYear": 2024,
+    "developer": "Square Enix",
+    "publisher": "Square Enix",
+    "players": "1 player; single-player only",
+    "modes": ["Single-player"],
+    "description": "Continue the reimagined Final Fantasy VII story as Cloud and his companions leave Midgar and travel through a wider world filled with danger and discovery.",
+    "highlights": ["Party-based real-time combat", "Large regions to explore", "Character-focused storytelling"],
+    "tags": ["Japanese RPG", "Party-based", "Story-rich"],
+    "steamAppId": 2909400
+  },
+  {
+    "id": "ps5-resident-evil-4",
+    "title": "Resident Evil 4",
+    "platform": "PS5",
+    "primaryGenre": "Survival horror",
+    "genres": ["Survival horror", "Action", "Third-person shooter"],
+    "releaseYear": 2023,
+    "developer": "Capcom",
+    "publisher": "Capcom",
+    "players": "1 player; single-player only",
+    "modes": ["Single-player"],
+    "description": "Play as Leon S. Kennedy on a dangerous rescue mission in a remote European village, balancing tense exploration, resource management, and intense combat.",
+    "highlights": ["Atmospheric survival-horror encounters", "Resource and inventory management", "Modernised combat and exploration"],
+    "tags": ["Horror", "Survival", "Action"],
+    "steamAppId": 2050650
+  },
+  {
+    "id": "ps5-gran-turismo-7",
+    "title": "Gran Turismo 7",
+    "platform": "PS5",
+    "primaryGenre": "Racing",
+    "genres": ["Racing", "Simulation", "Motorsport"],
+    "releaseYear": 2022,
+    "developer": "Polyphony Digital",
+    "publisher": "Sony Interactive Entertainment",
+    "players": "Single-player, local split-screen, and online multiplayer modes",
+    "modes": ["Single-player", "Local multiplayer", "Online multiplayer"],
+    "description": "Collect, tune, and race a wide range of cars across real-world-inspired circuits in a driving experience built for both newcomers and motorsport fans.",
+    "highlights": ["Large car collection", "Vehicle tuning and customisation", "Circuit racing and driving challenges"],
+    "tags": ["Car racing", "Driving simulator", "Competitive"],
+    "steamAppId": null
+  },
+  {
+    "id": "ps5-ea-sports-fc-26",
+    "title": "EA Sports FC 26",
+    "platform": "PS5",
+    "primaryGenre": "Sports",
+    "genres": ["Sports", "Football", "Simulation"],
+    "releaseYear": 2025,
+    "developer": "EA Canada, EA Romania",
+    "publisher": "Electronic Arts",
+    "players": "Solo, local multiplayer, and online modes; player limits vary by mode",
+    "modes": ["Single-player", "Local multiplayer", "Online multiplayer"],
+    "description": "Build a club, manage a squad, and play football matches featuring licensed teams, leagues, players, and multiple competitive and casual modes.",
+    "highlights": ["Club and team management options", "Multiple football game modes", "Local and online competition"],
+    "tags": ["Football", "Sports simulation", "Competitive"],
+    "steamAppId": 3405690
+  },
+  {
+    "id": "ps5-tekken-8",
+    "title": "TEKKEN 8",
+    "platform": "PS5",
+    "primaryGenre": "Fighting",
+    "genres": ["Fighting", "Competitive", "Action"],
+    "releaseYear": 2024,
+    "developer": "Bandai Namco Studios",
+    "publisher": "Bandai Namco Entertainment",
+    "players": "1–2 players locally; online versus modes are also available",
+    "modes": ["Single-player", "Local PvP", "Online PvP"],
+    "description": "Enter the next chapter of the Mishima and Kazama saga with a roster of fighters, fast-paced arena battles, and competitive online play.",
+    "highlights": ["Arena-based one-on-one combat", "Large fighter roster", "Story and competitive modes"],
+    "tags": ["Versus fighter", "Online PvP", "Combo-based combat"],
+    "steamAppId": 1778820
+  },
+  {
+    "id": "ps5-helldivers-2",
+    "title": "HELLDIVERS 2",
+    "platform": "PS5",
+    "primaryGenre": "Shooter",
+    "genres": ["Shooter", "Co-op", "Action", "Science fiction"],
+    "releaseYear": 2024,
+    "developer": "Arrowhead Game Studios",
+    "publisher": "Sony Interactive Entertainment",
+    "players": "1–4 players in online co-op squads",
+    "modes": ["Online co-op"],
+    "description": "Join a squad of elite soldiers on dangerous missions across hostile planets, using teamwork and an arsenal of weapons to defend Super Earth.",
+    "highlights": ["Four-player cooperative missions", "Team-based objectives", "Large-scale battles and support equipment"],
+    "tags": ["Third-person shooter", "Co-op", "Sci-fi"],
+    "steamAppId": 553850
+  },
+  {
+    "id": "ps4-last-of-us-part-2",
+    "title": "The Last of Us Part II",
+    "platform": "PS4",
+    "primaryGenre": "Action-adventure",
+    "genres": ["Action-adventure", "Survival", "Stealth", "Drama"],
+    "releaseYear": 2020,
+    "developer": "Naughty Dog",
+    "publisher": "Sony Interactive Entertainment",
+    "players": "1 player; single-player only",
+    "modes": ["Single-player"],
+    "description": "Follow Ellie through a harsh post-pandemic world in a character-driven journey shaped by survival, difficult choices, and the consequences of violence.",
+    "highlights": ["Narrative-focused campaign", "Stealth and tactical encounters", "Detailed environments and exploration"],
+    "tags": ["Story-rich", "Stealth", "Post-apocalyptic"],
+    "steamAppId": null
+  },
+  {
+    "id": "ps4-ghost-of-tsushima",
+    "title": "Ghost of Tsushima Director's Cut",
+    "platform": "PS4",
+    "primaryGenre": "Action-adventure",
+    "genres": ["Action-adventure", "Open-world", "Stealth", "Historical"],
+    "releaseYear": 2021,
+    "developer": "Sucker Punch Productions",
+    "publisher": "Sony Interactive Entertainment",
+    "players": "Single-player campaign; optional online co-op through Legends mode",
+    "modes": ["Single-player", "Online co-op"],
+    "description": "Explore feudal Japan as samurai Jin Sakai and adapt your fighting style to resist the Mongol invasion of Tsushima.",
+    "highlights": ["Open-world exploration", "Samurai combat and stealth", "Additional Legends co-op mode"],
+    "tags": ["Samurai", "Open world", "Historical fiction"],
+    "steamAppId": 2215430
+  },
+  {
+    "id": "ps4-bloodborne",
+    "title": "Bloodborne",
+    "platform": "PS4",
+    "primaryGenre": "Action RPG",
+    "genres": ["Action RPG", "Soulslike", "Horror", "Fantasy"],
+    "releaseYear": 2015,
+    "developer": "FromSoftware",
+    "publisher": "Sony Computer Entertainment",
+    "players": "Solo play with optional online co-op and player-versus-player features",
+    "modes": ["Single-player", "Online co-op", "Online PvP"],
+    "description": "Hunt nightmarish creatures through the gothic city of Yharnam, uncovering its mysteries in a fast, challenging action RPG.",
+    "highlights": ["Aggressive, fast-paced combat", "Gothic horror atmosphere", "Exploration and demanding boss fights"],
+    "tags": ["Gothic horror", "Soulslike", "Challenging"],
+    "steamAppId": null
+  },
+  {
+    "id": "ps4-persona-5-royal",
+    "title": "Persona 5 Royal",
+    "platform": "PS4",
+    "primaryGenre": "JRPG",
+    "genres": ["JRPG", "Turn-based RPG", "Social simulation", "Fantasy"],
+    "releaseYear": 2019,
+    "developer": "P-Studio (Atlus)",
+    "publisher": "Atlus, Sega",
+    "players": "1 player; single-player only",
+    "modes": ["Single-player"],
+    "description": "Live a double life as a Tokyo student and a Phantom Thief, building friendships by day and changing corrupt hearts in supernatural turn-based battles.",
+    "highlights": ["Stylish turn-based combat", "Social links and daily-life activities", "Long-form story with expanded content"],
+    "tags": ["Japanese RPG", "Turn-based", "Life simulation"],
+    "steamAppId": 1687950
+  },
+  {
+    "id": "ps4-red-dead-redemption-2",
+    "title": "Red Dead Redemption 2",
+    "platform": "PS4",
+    "primaryGenre": "Open-world action-adventure",
+    "genres": ["Action-adventure", "Open-world", "Western", "Shooter"],
+    "releaseYear": 2018,
+    "developer": "Rockstar Studios",
+    "publisher": "Rockstar Games",
+    "players": "Single-player campaign; separate Red Dead Online multiplayer mode",
+    "modes": ["Single-player", "Online multiplayer"],
+    "description": "Ride with the Van der Linde gang across a vast frontier as outlaw Arthur Morgan in a detailed open-world western story.",
+    "highlights": ["Vast frontier world", "Story-driven missions and characters", "Hunting, exploration, and side activities"],
+    "tags": ["Western", "Open world", "Story-rich"],
+    "steamAppId": 1174180
+  },
+  {
+    "id": "ps4-mortal-kombat-11",
+    "title": "Mortal Kombat 11",
+    "platform": "PS4",
+    "primaryGenre": "Fighting",
+    "genres": ["Fighting", "Competitive", "Action"],
+    "releaseYear": 2019,
+    "developer": "NetherRealm Studios",
+    "publisher": "Warner Bros. Games",
+    "players": "1–2 players locally; online versus modes are also available",
+    "modes": ["Single-player", "Local PvP", "Online PvP"],
+    "description": "Choose from a roster of fighters and battle through cinematic story chapters, towers, local matches, and online competition.",
+    "highlights": ["Cinematic story mode", "Customisable fighter variations", "Local and online versus battles"],
+    "tags": ["Fighting game", "Versus", "Competitive"],
+    "steamAppId": 976310
+  },
+  {
+    "id": "ps4-dirt-rally-2",
+    "title": "DiRT Rally 2.0",
+    "platform": "PS4",
+    "primaryGenre": "Racing",
+    "genres": ["Racing", "Simulation", "Motorsport"],
+    "releaseYear": 2019,
+    "developer": "Codemasters",
+    "publisher": "Codemasters, Electronic Arts",
+    "players": "Single-player and online competitive features",
+    "modes": ["Single-player", "Online multiplayer"],
+    "description": "Test precision driving across demanding rally stages where surface changes, weather, and vehicle handling make every run a challenge.",
+    "highlights": ["Rally and rallycross events", "Vehicle handling and tuning", "Dynamic stage conditions"],
+    "tags": ["Rally", "Driving simulation", "Competitive"],
+    "steamAppId": 690790
+  },
+  {
+    "id": "ps4-minecraft",
+    "title": "Minecraft",
+    "platform": "PS4",
+    "primaryGenre": "Sandbox",
+    "genres": ["Sandbox", "Survival", "Adventure", "Creative"],
+    "releaseYear": 2014,
+    "developer": "Mojang Studios",
+    "publisher": "Mojang Studios, Microsoft Studios",
+    "players": "Solo, local split-screen, and online multiplayer; limits depend on edition and setup",
+    "modes": ["Single-player", "Local co-op", "Online multiplayer", "Creative"],
+    "description": "Explore procedurally generated worlds, gather resources, craft tools, build structures, and choose between survival challenges or open-ended creativity.",
+    "highlights": ["Creative and survival play styles", "Building and crafting systems", "Local and online multiplayer"],
+    "tags": ["Building", "Crafting", "Survival"],
+    "steamAppId": null
+  },
+  {
+    "id": "ps4-doom-eternal",
+    "title": "DOOM Eternal",
+    "platform": "PS4",
+    "primaryGenre": "Shooter",
+    "genres": ["Shooter", "First-person shooter", "Action", "Science fiction"],
+    "releaseYear": 2020,
+    "developer": "id Software",
+    "publisher": "Bethesda Softworks",
+    "players": "Single-player campaign with separate online Battlemode features",
+    "modes": ["Single-player", "Online multiplayer"],
+    "description": "Fight through a demon-infested future with an aggressive arsenal, fast movement, and combat encounters built around constant momentum.",
+    "highlights": ["Fast first-person combat", "Distinct weapons and enemy encounters", "Campaign and Battlemode"],
+    "tags": ["FPS", "Fast-paced", "Sci-fi horror"],
+    "steamAppId": 782330
+  },
+  {
+    "id": "ps4-it-takes-two",
+    "title": "It Takes Two",
+    "platform": "PS4",
+    "primaryGenre": "Co-op adventure",
+    "genres": ["Co-op", "Platformer", "Adventure", "Puzzle"],
+    "releaseYear": 2021,
+    "developer": "Hazelight Studios",
+    "publisher": "Electronic Arts",
+    "players": "Exactly 2 players; local couch co-op or online co-op",
+    "modes": ["Local co-op", "Online co-op"],
+    "description": "Two players control a couple transformed into tiny figures and work together through imaginative levels filled with platforming, puzzles, and changing abilities.",
+    "highlights": ["Designed exclusively for two-player co-op", "Varied mechanics across levels", "Local and online co-op options"],
+    "tags": ["Cooperative", "Puzzle platformer", "Two-player"],
+    "steamAppId": 1426210
+  },
+  {
+    "id": "pc-baldurs-gate-3",
+    "title": "Baldur's Gate 3",
+    "platform": "PC",
+    "primaryGenre": "Role-playing",
+    "genres": ["Role-playing", "CRPG", "Turn-based combat", "Fantasy"],
+    "releaseYear": 2023,
+    "developer": "Larian Studios",
+    "publisher": "Larian Studios",
+    "players": "1–4 players; solo play or cooperative multiplayer",
+    "modes": ["Single-player", "Online co-op", "Local co-op"],
+    "description": "Create a hero and shape an epic fantasy campaign through tactical battles, branching dialogue, exploration, and choices that influence the story.",
+    "highlights": ["Deep character creation and progression", "Tactical turn-based encounters", "Branching story and co-op campaign"],
+    "tags": ["CRPG", "Dungeons and dragons", "Choice-driven"],
+    "steamAppId": 1086940
+  },
+  {
+    "id": "pc-counter-strike-2",
+    "title": "Counter-Strike 2",
+    "platform": "PC",
+    "primaryGenre": "Shooter",
+    "genres": ["Shooter", "Tactical FPS", "Competitive", "Team-based"],
+    "releaseYear": 2023,
+    "developer": "Valve",
+    "publisher": "Valve",
+    "players": "Online team-based multiplayer; standard competitive matches are 5v5",
+    "modes": ["Online PvP", "Team-based multiplayer"],
+    "description": "Compete in objective-focused tactical rounds where teamwork, map knowledge, economy management, and precise shooting decide the outcome.",
+    "highlights": ["Round-based tactical gameplay", "Competitive matchmaking", "Team strategy and precision aim"],
+    "tags": ["FPS", "Esports", "Competitive"],
+    "steamAppId": 730
+  },
+  {
+    "id": "pc-dota-2",
+    "title": "Dota 2",
+    "platform": "PC",
+    "primaryGenre": "MOBA",
+    "genres": ["MOBA", "Strategy", "Team-based", "Competitive"],
+    "releaseYear": 2013,
+    "developer": "Valve",
+    "publisher": "Valve",
+    "players": "10 players in standard online matches (5v5)",
+    "modes": ["Online PvP", "Team-based multiplayer"],
+    "description": "Choose a hero and work with four teammates to outdraft, outmanoeuvre, and defeat the opposing team in a strategic online arena.",
+    "highlights": ["Large roster of distinct heroes", "Team tactics and item builds", "Deep competitive strategy"],
+    "tags": ["MOBA", "5v5", "Esports"],
+    "steamAppId": 570
+  },
+  {
+    "id": "pc-cyberpunk-2077",
+    "title": "Cyberpunk 2077",
+    "platform": "PC",
+    "primaryGenre": "Action RPG",
+    "genres": ["Action RPG", "Open-world", "Science fiction", "Shooter"],
+    "releaseYear": 2020,
+    "developer": "CD Projekt Red",
+    "publisher": "CD Projekt",
+    "players": "1 player; single-player only",
+    "modes": ["Single-player"],
+    "description": "Explore Night City as mercenary V, shaping your character and approach through combat, hacking, dialogue, and jobs in a dense futuristic metropolis.",
+    "highlights": ["Large open-world city", "Flexible builds and play styles", "Choice-driven quests and story"],
+    "tags": ["Cyberpunk", "Open world", "Role-playing"],
+    "steamAppId": 1091500
+  },
+  {
+    "id": "pc-civilization-vi",
+    "title": "Sid Meier's Civilization VI",
+    "platform": "PC",
+    "primaryGenre": "Strategy",
+    "genres": ["Strategy", "Turn-based strategy", "4X", "Simulation"],
+    "releaseYear": 2016,
+    "developer": "Firaxis Games",
+    "publisher": "2K",
+    "players": "Single-player and online multiplayer; supported player count depends on game setup",
+    "modes": ["Single-player", "Online multiplayer"],
+    "description": "Lead a civilisation from its earliest settlement into the modern era, developing cities, researching technologies, managing diplomacy, and competing for victory.",
+    "highlights": ["Turn-based empire building", "Multiple victory paths", "Diplomacy, research, and city planning"],
+    "tags": ["4X", "Empire building", "Turn-based"],
+    "steamAppId": 289070
+  },
+  {
+    "id": "pc-hades-2",
+    "title": "Hades II",
+    "platform": "PC",
+    "primaryGenre": "Roguelike",
+    "genres": ["Roguelike", "Action", "Dungeon crawler", "Mythology"],
+    "releaseYear": 2025,
+    "developer": "Supergiant Games",
+    "publisher": "Supergiant Games",
+    "players": "1 player; single-player only",
+    "modes": ["Single-player"],
+    "description": "Battle through an ever-changing underworld as Melinoë, combining quick action, magical abilities, and myth-inspired encounters across repeated runs.",
+    "highlights": ["Replayable run-based progression", "Fast action combat and spellcraft", "Mythology-inspired characters and world"],
+    "tags": ["Roguelite", "Action", "Replayable"],
+    "steamAppId": 1145350
+  },
+  {
+    "id": "pc-flight-simulator-2024",
+    "title": "Microsoft Flight Simulator 2024",
+    "platform": "PC",
+    "primaryGenre": "Simulation",
+    "genres": ["Simulation", "Flight simulator", "Adventure"],
+    "releaseYear": 2024,
+    "developer": "Asobo Studio",
+    "publisher": "Xbox Game Studios",
+    "players": "Solo activities and shared-world online features",
+    "modes": ["Single-player", "Online multiplayer"],
+    "description": "Pilot a wide range of aircraft across a detailed digital recreation of the planet, with activities that extend beyond free flight.",
+    "highlights": ["Detailed aircraft and flight systems", "Global environments", "Career-style activities and shared-world features"],
+    "tags": ["Flight sim", "Realism", "Exploration"],
+    "steamAppId": 2537590
+  },
+  {
+    "id": "pc-terraria",
+    "title": "Terraria",
+    "platform": "PC",
+    "primaryGenre": "Sandbox",
+    "genres": ["Sandbox", "Survival", "Adventure", "Crafting"],
+    "releaseYear": 2011,
+    "developer": "Re-Logic",
+    "publisher": "Re-Logic",
+    "players": "Single-player and online cooperative multiplayer",
+    "modes": ["Single-player", "Online co-op"],
+    "description": "Dig, build, craft, and battle through a procedurally generated 2D world filled with underground discoveries, equipment, and challenging bosses.",
+    "highlights": ["Exploration and resource gathering", "Crafting, building, and equipment progression", "Boss encounters and co-op play"],
+    "tags": ["2D sandbox", "Crafting", "Survival"],
+    "steamAppId": 105600
+  },
+  {
+    "id": "pc-forza-horizon-5",
+    "title": "Forza Horizon 5",
+    "platform": "PC",
+    "primaryGenre": "Racing",
+    "genres": ["Racing", "Open-world", "Simulation", "Sports"],
+    "releaseYear": 2021,
+    "developer": "Playground Games",
+    "publisher": "Xbox Game Studios",
+    "players": "Single-player and online multiplayer modes",
+    "modes": ["Single-player", "Online multiplayer"],
+    "description": "Drive across a vibrant open-world version of Mexico, collecting cars and taking part in races, stunts, exploration, and online events.",
+    "highlights": ["Open-world driving", "Large car collection", "Varied racing events and online activities"],
+    "tags": ["Arcade racing", "Open world", "Car collection"],
+    "steamAppId": 1551360
+  },
+  {
+    "id": "pc-portal-2",
+    "title": "Portal 2",
+    "platform": "PC",
+    "primaryGenre": "Puzzle",
+    "genres": ["Puzzle", "Platformer", "First-person", "Co-op"],
+    "releaseYear": 2011,
+    "developer": "Valve",
+    "publisher": "Valve",
+    "players": "1 player in the campaign; 2 players in the separate co-op campaign",
+    "modes": ["Single-player", "Local co-op", "Online co-op"],
+    "description": "Solve physics-based chambers using a portal device, combining spatial reasoning, timing, and environmental clues in a witty first-person puzzle adventure.",
+    "highlights": ["Creative physics-based puzzles", "Distinct single-player and co-op campaigns", "Memorable writing and level design"],
+    "tags": ["Puzzle solving", "Physics", "Two-player co-op"],
+    "steamAppId": 620
+  }
+]
+```
+
+## Suggested filter values
+
+Use the `genres` arrays as the source for a dynamic genre filter. Useful high-level genre labels present in this catalogue include:
+
+- Action / Action-adventure
+- Adventure
+- Role-playing / Action RPG / JRPG / CRPG
+- Shooter / Tactical FPS
+- Survival horror / Horror
+- Racing / Simulation / Motorsport
+- Sports / Football
+- Fighting
+- Platformer
+- Sandbox / Survival / Creative
+- Strategy / Turn-based strategy / MOBA
+- Roguelike
+- Puzzle / Co-op
+
+## Reference sources for platform and store verification
+
+These are starting points for checking platform availability and current store metadata. Store availability, regional editions, and online features may change.
+
+- PlayStation PS5 games: https://www.playstation.com/en-us/ps5/games/
+- PlayStation PS4 games: https://www.playstation.com/en-us/ps4/ps4-games/
+- PlayStation Store India: https://store.playstation.com/en-in/
+- Steam store: https://store.steampowered.com/
