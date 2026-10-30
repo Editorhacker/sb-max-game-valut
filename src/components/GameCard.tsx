@@ -16,11 +16,10 @@ export function GameCard({ game, onClick, index }: GameCardProps) {
 
   return (
     <motion.article
-      layout
-      initial={{ opacity: 0, y: 30 }}
+      initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, scale: 0.9 }}
-      transition={{ duration: 0.4, delay: Math.min(index * 0.05, 0.4) }}
+      exit={{ opacity: 0, scale: 0.95 }}
+      transition={{ duration: 0.3, delay: Math.min(index * 0.04, 0.3) }}
       whileHover={{ y: -6, scale: 1.02 }}
       className="group relative flex flex-col rounded-2xl overflow-hidden bg-[#111218] border border-white/8 hover:border-amber-400/40 transition-all duration-300 cursor-pointer shadow-lg hover:shadow-red-600/20 hover:shadow-2xl"
       onClick={() => onClick(game)}

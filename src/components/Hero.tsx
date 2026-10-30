@@ -10,52 +10,33 @@ interface HeroProps {
 const uniqueGenresCount = allGenres.length;
 const totalGames = games.length;
 
-// Red -> Golden -> Red color sequence
-const RED_TO_GOLD = [
-  'rgba(239, 68, 68, 0.38)',
-  'rgba(220, 38, 38, 0.42)',
-  'rgba(245, 158, 11, 0.38)',
-  'rgba(251, 191, 36, 0.42)',
-  'rgba(245, 158, 11, 0.38)',
-  'rgba(220, 38, 38, 0.42)',
-  'rgba(239, 68, 68, 0.38)',
-];
-
-// Golden -> Red -> Golden color sequence
-const GOLD_TO_RED = [
-  'rgba(251, 191, 36, 0.38)',
-  'rgba(245, 158, 11, 0.38)',
-  'rgba(239, 68, 68, 0.40)',
-  'rgba(220, 38, 38, 0.44)',
-  'rgba(239, 68, 68, 0.40)',
-  'rgba(245, 158, 11, 0.38)',
-  'rgba(251, 191, 36, 0.38)',
-];
-
-// Animated dynamic aura orb with color-shifting and gentle movement
-function DynamicAuraOrb({
+// ── Ultra-smooth GPU-accelerated shifting aura ─────────────────────────────
+// Uses opacity cross-fading of static pre-rendered layers instead of heavy
+// CSS background/color re-painting, ensuring 120 FPS frictionless scrolling.
+function ShiftingAura({
   className,
-  colorSequence,
+  initialColor = 'red',
   duration = 10,
-  delay = 2,
-  moveX = 40,
-  moveY = 30,
+  delay = 0,
+  moveX = 35,
+  moveY = 25,
 }: {
   className: string;
-  colorSequence: string[];
+  initialColor?: 'red' | 'gold';
   duration?: number;
   delay?: number;
   moveX?: number;
   moveY?: number;
 }) {
+  const isRedFirst = initialColor === 'red';
+
   return (
     <motion.div
-      className={`absolute rounded-full blur-[90px] pointer-events-none ${className}`}
+      className={`absolute pointer-events-none transform-gpu will-change-transform ${className}`}
       animate={{
-        backgroundColor: colorSequence,
-        x: [0, moveX, moveX * 0.3, -moveX * 0.7, -moveX * 0.2, 0],
-        y: [0, -moveY, -moveY * 0.3, moveY * 0.7, moveY * 0.2, 0],
-        scale: [1, 1.15, 1.05, 0.94, 1.08, 1],
+        x: [0, moveX, moveX * 0.25, -moveX * 0.6, 0],
+        y: [0, -moveY, -moveY * 0.25, moveY * 0.6, 0],
+        scale: [1, 1.1, 1.03, 0.96, 1],
       }}
       transition={{
         duration,
@@ -63,7 +44,39 @@ function DynamicAuraOrb({
         delay,
         ease: 'easeInOut',
       }}
-    />
+    >
+      {/* Red Glow Layer */}
+      <motion.div
+        className="absolute inset-0 rounded-full blur-3xl bg-gradient-to-br from-red-600/40 via-rose-600/35 to-red-950/40 transform-gpu will-change-opacity"
+        animate={{
+          opacity: isRedFirst
+            ? [1, 0.8, 0.1, 0.05, 0.1, 0.8, 1]
+            : [0.05, 0.1, 0.8, 1, 0.8, 0.1, 0.05],
+        }}
+        transition={{
+          duration,
+          repeat: Infinity,
+          delay,
+          ease: 'easeInOut',
+        }}
+      />
+
+      {/* Gold Glow Layer */}
+      <motion.div
+        className="absolute inset-0 rounded-full blur-3xl bg-gradient-to-br from-amber-400/40 via-yellow-500/35 to-amber-700/30 transform-gpu will-change-opacity"
+        animate={{
+          opacity: isRedFirst
+            ? [0.05, 0.1, 0.8, 1, 0.8, 0.1, 0.05]
+            : [1, 0.8, 0.1, 0.05, 0.1, 0.8, 1],
+        }}
+        transition={{
+          duration,
+          repeat: Infinity,
+          delay,
+          ease: 'easeInOut',
+        }}
+      />
+    </motion.div>
   );
 }
 
@@ -73,17 +86,22 @@ export function Hero({ searchValue, onSearchChange }: HeroProps) {
       id="home"
       className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden bg-[#07070a] pt-24 pb-16"
     >
-      {/* ── Dynamic Ambient Center Glow (smoothly breathes Red <-> Gold) ── */}
+      {/* ── Background Dual Cross-fading Atmosphere (100% GPU compositor) ── */}
       <motion.div
-        className="absolute inset-0 pointer-events-none"
+        className="absolute inset-0 pointer-events-none bg-[radial-gradient(ellipse_65%_55%_at_48%_45%,rgba(239,68,68,0.15)_0%,transparent_70%)] transform-gpu will-change-opacity"
         animate={{
-          background: [
-            'radial-gradient(ellipse 65% 55% at 45% 45%, rgba(239, 68, 68, 0.16) 0%, transparent 70%)',
-            'radial-gradient(ellipse 70% 60% at 50% 48%, rgba(245, 158, 11, 0.17) 0%, transparent 70%)',
-            'radial-gradient(ellipse 65% 55% at 55% 46%, rgba(251, 191, 36, 0.18) 0%, transparent 70%)',
-            'radial-gradient(ellipse 70% 60% at 50% 44%, rgba(220, 38, 38, 0.17) 0%, transparent 70%)',
-            'radial-gradient(ellipse 65% 55% at 45% 45%, rgba(239, 68, 68, 0.16) 0%, transparent 70%)',
-          ],
+          opacity: [1, 0.7, 0.15, 0.1, 0.15, 0.7, 1],
+        }}
+        transition={{
+          duration: 12,
+          repeat: Infinity,
+          ease: 'easeInOut',
+        }}
+      />
+      <motion.div
+        className="absolute inset-0 pointer-events-none bg-[radial-gradient(ellipse_70%_60%_at_52%_48%,rgba(245,158,11,0.15)_0%,transparent_70%)] transform-gpu will-change-opacity"
+        animate={{
+          opacity: [0.1, 0.15, 0.7, 1, 0.7, 0.15, 0.1],
         }}
         transition={{
           duration: 12,
@@ -96,34 +114,34 @@ export function Hero({ searchValue, onSearchChange }: HeroProps) {
       <div className="absolute inset-0 bg-[linear-gradient(to_bottom,transparent_50%,rgba(7,7,10,0.95)_100%)] pointer-events-none" />
 
       {/* ── Color-Shifting Aura Orbs with slight organic movement ── */}
-      {/* Left orb (Primary aura seen behind the main title) */}
-      <DynamicAuraOrb
-        className="w-[440px] h-[440px] top-[18%] left-[8%] sm:left-[16%]"
-        colorSequence={RED_TO_GOLD}
+      {/* Left primary aura (shifts Red <-> Gold with gentle movement) */}
+      <ShiftingAura
+        className="w-96 h-96 sm:w-[420px] sm:h-[420px] top-[18%] left-[6%] sm:left-[14%]"
+        initialColor="red"
         duration={10}
         delay={0}
-        moveX={45}
-        moveY={35}
+        moveX={35}
+        moveY={25}
       />
 
-      {/* Right orb (Counter-balance shifting Gold <-> Red) */}
-      <DynamicAuraOrb
-        className="w-[380px] h-[380px] bottom-[20%] right-[8%] sm:right-[15%]"
-        colorSequence={GOLD_TO_RED}
+      {/* Right counter-aura (shifts Gold <-> Red with gentle movement) */}
+      <ShiftingAura
+        className="w-80 h-80 sm:w-[380px] sm:h-[380px] bottom-[20%] right-[6%] sm:right-[14%]"
+        initialColor="gold"
         duration={11}
         delay={1.5}
-        moveX={-40}
-        moveY={30}
+        moveX={-30}
+        moveY={20}
       />
 
-      {/* Top ambient highlight */}
-      <DynamicAuraOrb
-        className="w-[320px] h-[320px] top-[12%] right-[35%]"
-        colorSequence={RED_TO_GOLD}
+      {/* Subtle top-center highlight */}
+      <ShiftingAura
+        className="w-72 h-72 top-[10%] right-[35%]"
+        initialColor="red"
         duration={13}
-        delay={3}
-        moveX={30}
-        moveY={-25}
+        delay={2.5}
+        moveX={20}
+        moveY={-15}
       />
 
       {/* Tech Grid Pattern */}
