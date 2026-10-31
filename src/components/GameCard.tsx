@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { motion } from 'framer-motion';
+import { useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { Zap, Users, ArrowUpRight } from 'lucide-react';
 import type { Game } from '../types/game';
 import { getGameCoverUrl, getPlatformBadgeClass, getCafeRigInfo } from '../lib/utils';
@@ -15,7 +15,26 @@ interface GameCardProps {
 export function GameCard({ game, onClick, index, className = '' }: GameCardProps) {
   const [imgError, setImgError] = useState(false);
   const [hovered, setHovered] = useState(false);
+  const [modeIndex, setModeIndex] = useState(0);
   const rig = getCafeRigInfo(game);
+
+  // Auto-cycle through all game modes with a sliding animation
+  useEffect(() => {
+    if (!game.modes || game.modes.length <= 1) return;
+
+    let interval: ReturnType<typeof setInterval>;
+    const timeout = setTimeout(() => {
+      setModeIndex((prev) => (prev + 1) % game.modes.length);
+      interval = setInterval(() => {
+        setModeIndex((prev) => (prev + 1) % game.modes.length);
+      }, 2800);
+    }, (index % 4) * 450 + 800);
+
+    return () => {
+      clearTimeout(timeout);
+      clearInterval(interval);
+    };
+  }, [game.modes, index]);
 
   // Reliable poster URL with fallback
   const posterUrl = imgError
@@ -103,7 +122,25 @@ export function GameCard({ game, onClick, index, className = '' }: GameCardProps
 
           <div className="flex items-center gap-1.5 text-[10px] sm:text-[11px] font-mono text-zinc-400 mt-1.5 sm:mt-2">
             <Users className="w-3.5 h-3.5 text-zinc-500 flex-shrink-0" />
-            <span className="truncate">{game.modes[0]}</span>
+            <div className="h-4 sm:h-4.5 overflow-hidden relative flex-1 min-w-0 flex items-center">
+              <AnimatePresence mode="wait" initial={false}>
+                <motion.span
+                  key={modeIndex}
+                  initial={{ y: 14, opacity: 0 }}
+                  animate={{ y: 0, opacity: 1 }}
+                  exit={{ y: -14, opacity: 0 }}
+                  transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
+                  className="block truncate text-zinc-300 font-medium group-hover:text-zinc-100 transition-colors"
+                >
+                  {game.modes[modeIndex] ?? game.modes[0]}
+                </motion.span>
+              </AnimatePresence>
+            </div>
+            {game.modes.length > 1 && (
+              <span className="text-[9px] font-mono px-1 py-0.5 rounded bg-white/5 text-zinc-500 border border-white/5 flex-shrink-0">
+                {modeIndex + 1}/{game.modes.length}
+              </span>
+            )}
           </div>
         </div>
 
