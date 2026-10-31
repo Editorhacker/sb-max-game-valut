@@ -57,6 +57,14 @@ body {
 }
 ::-webkit-scrollbar-thumb:hover { background: var(--crimson); }
 
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
 /* SCANLINES */
 .scanlines::after {
   content: '';

@@ -1,43 +1,89 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
-import { Gamepad2, ChevronDown } from 'lucide-react';
+import { Gamepad2, Crosshair } from 'lucide-react';
 import type { Game } from '../types/game';
 import { GameCard } from './GameCard';
-import { sfx } from '../lib/sound';
 
 interface GameGridProps {
   games: Game[];
   onGameClick: (game: Game) => void;
 }
 
-const PAGE_SIZE = 10;
-
 export function GameGrid({ games, onGameClick }: GameGridProps) {
-  const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const [activeIndex, setActiveIndex] = useState(0);
 
-  // Reset to initial count whenever the filtered list of games changes
+  // Mouse drag-to-scroll interaction refs
+  const isDragging = useRef(false);
+  const startX = useRef(0);
+  const scrollStartLeft = useRef(0);
+  const hasMoved = useRef(false);
+
+  // Update active index based on scroll position
+  const handleScroll = useCallback(() => {
+    const el = scrollRef.current;
+    if (!el || games.length === 0) return;
+    const width = el.clientWidth;
+    if (width > 0) {
+      const index = Math.round(el.scrollLeft / width);
+      setActiveIndex(Math.min(Math.max(0, index), games.length - 1));
+    }
+  }, [games.length]);
+
+  // Reset scroll whenever filtered games change
   useEffect(() => {
-    setVisibleCount(PAGE_SIZE);
+    if (scrollRef.current) {
+      scrollRef.current.scrollTo({ left: 0, behavior: 'instant' });
+    }
+    setActiveIndex(0);
   }, [games]);
 
-  const visibleGames = games.slice(0, visibleCount);
-  const hasMore = visibleCount < games.length;
-
-  const handleSeeMore = () => {
-    sfx.playClick();
-    setVisibleCount((prev) => prev + PAGE_SIZE);
+  // Mouse drag-to-scroll handlers (for desktop users without trackpad)
+  const handleMouseDown = (e: React.MouseEvent) => {
+    if (e.button !== 0 || !scrollRef.current) return;
+    isDragging.current = true;
+    hasMoved.current = false;
+    startX.current = e.pageX;
+    scrollStartLeft.current = scrollRef.current.scrollLeft;
   };
+
+  const handleMouseMove = (e: React.MouseEvent) => {
+    if (!isDragging.current || !scrollRef.current) return;
+    const delta = e.pageX - startX.current;
+    if (Math.abs(delta) > 5) {
+      hasMoved.current = true;
+    }
+    scrollRef.current.scrollLeft = scrollStartLeft.current - delta;
+  };
+
+  const handleMouseUp = () => {
+    isDragging.current = false;
+    setTimeout(() => {
+      hasMoved.current = false;
+    }, 60);
+  };
+
+  const handleCardClick = (game: Game) => {
+    // If user dragged horizontally, ignore the click to avoid opening dialog
+    if (hasMoved.current) return;
+    onGameClick(game);
+  };
+
+  const currentGame = games[activeIndex] || games[0];
 
   return (
     <div className="w-full">
       <AnimatePresence mode="popLayout">
-        {games.length === 0 ? (
+        {games.length === 0 || !currentGame ? (
           <motion.div
             key="empty"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
-            className="col-span-full flex flex-col items-center justify-center py-16 sm:py-24 gap-4 sm:gap-5"
+            className="flex flex-col items-center justify-center py-16 sm:py-24 gap-4 sm:gap-5 border border-white/10 bg-[#0d0f1a]/50"
+            style={{
+              clipPath: 'polygon(0 0, calc(100% - 14px) 0, 100% 14px, 100% 100%, 14px 100%, 0 calc(100% - 14px))',
+            }}
           >
             <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-gray-900 border border-white/10 flex items-center justify-center">
               <Gamepad2 className="w-7 h-7 sm:w-8 sm:h-8 text-gray-600" />
@@ -51,45 +97,93 @@ export function GameGrid({ games, onGameClick }: GameGridProps) {
           </motion.div>
         ) : (
           <motion.div
-            key="grid-container"
+            key="scrollable-spotlight"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
+            className="flex flex-col gap-3 sm:gap-4"
           >
-            <div className="grid grid-cols-1 min-[380px]:grid-cols-2 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3.5 sm:gap-5">
-              {visibleGames.map((game, i) => (
-                <GameCard
+            {/* Top Status Bar */}
+            <div className="flex items-center justify-between pb-2 border-b border-white/5 font-mono">
+              <div className="flex items-center gap-3">
+                <span
+                  className="inline-flex items-center gap-1.5 px-3 py-1 text-[11px] font-bold uppercase tracking-wider text-red-400 bg-red-600/10 border border-red-500/30 shadow-[0_0_15px_rgba(232,25,44,0.15)]"
+                  style={{
+                    clipPath: 'polygon(0 0, calc(100% - 5px) 0, 100% 5px, 100% 100%, 5px 100%, 0 calc(100% - 5px))',
+                  }}
+                >
+                  <Crosshair className="w-3.5 h-3.5 text-red-500" />
+                  <span>CENTER SPOTLIGHT</span>
+                </span>
+                <span className="text-xs text-zinc-400">
+                  GAME <strong className="text-amber-400">{String(activeIndex + 1).padStart(2, '0')}</strong> /{' '}
+                  <strong className="text-white">{String(games.length).padStart(2, '0')}</strong>
+                </span>
+              </div>
+
+              <div className="font-mono text-[11px] text-zinc-500">
+                <span>SWIPE OR DRAG TO SCROLL</span>
+              </div>
+            </div>
+
+            {/* Purely Scrollable Track (100% Width Per Slide, 1 Card In Dead Center) */}
+            <div
+              ref={scrollRef}
+              onScroll={handleScroll}
+              onMouseDown={handleMouseDown}
+              onMouseMove={handleMouseMove}
+              onMouseUp={handleMouseUp}
+              onMouseLeave={handleMouseUp}
+              className="w-full overflow-x-auto overflow-y-hidden flex snap-x snap-mandatory scroll-smooth py-3 no-scrollbar cursor-grab active:cursor-grabbing select-none"
+            >
+              {games.map((game, i) => (
+                <div
                   key={game.id}
-                  game={game}
-                  onClick={onGameClick}
-                  index={i}
-                />
+                  className="w-full shrink-0 flex items-center justify-center snap-center px-2 sm:px-4"
+                >
+                  <div className="w-full max-w-[280px] min-[400px]:max-w-[310px] sm:max-w-[340px] md:max-w-[360px]">
+                    <GameCard
+                      game={game}
+                      onClick={handleCardClick}
+                      index={i}
+                    />
+                  </div>
+                </div>
               ))}
             </div>
 
-            {hasMore && (
-              <div className="mt-10 sm:mt-12 flex flex-col items-center justify-center gap-2.5">
-                <button
-                  type="button"
-                  onClick={handleSeeMore}
-                  onMouseEnter={() => sfx.playHover()}
-                  className="group relative inline-flex items-center justify-center gap-2 px-8 py-3.5 font-display text-sm sm:text-base font-black italic tracking-widest text-white uppercase transition-all duration-300 bg-gradient-to-r from-red-600 via-rose-600 to-red-600 hover:from-red-500 hover:to-rose-500 shadow-[0_0_25px_rgba(232,25,44,0.4)] hover:shadow-[0_0_35px_rgba(232,25,44,0.7)] hover:scale-[1.02] active:scale-[0.98] cursor-pointer"
-                  style={{
-                    clipPath: 'polygon(0 0, calc(100% - 10px) 0, 100% 10px, 100% 100%, 10px 100%, 0 calc(100% - 10px))',
-                  }}
-                >
-                  <span>SEE MORE</span>
-                  <ChevronDown className="w-4 h-4 transition-transform duration-300 group-hover:translate-y-0.5" />
-                </button>
-                <span className="font-mono text-[11px] text-zinc-400">
-                  Showing <strong className="text-amber-400">{visibleGames.length}</strong> of{' '}
-                  <strong className="text-white">{games.length}</strong> games
+            {/* Bottom Cyber Vault Scrubber & Track */}
+            <div className="flex flex-col gap-2 pt-2 border-t border-white/5 font-mono text-[11px]">
+              <div className="flex items-center justify-between text-zinc-400">
+                <span className="flex items-center gap-1.5 text-zinc-300 font-semibold truncate max-w-[220px] sm:max-w-xs">
+                  <span className="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse" />
+                  <span className="truncate uppercase tracking-wider">{currentGame.title}</span>
+                </span>
+
+                <span className="text-amber-400 font-bold shrink-0">
+                  {activeIndex + 1} / {games.length}
                 </span>
               </div>
-            )}
+
+              {/* Progress Line */}
+              <div className="w-full h-1 bg-[#0d0f1a] border border-white/10 rounded-full overflow-hidden">
+                <div
+                  className="h-full bg-gradient-to-r from-red-600 via-rose-500 to-red-600 transition-all duration-150 shadow-[0_0_10px_#e8192c]"
+                  style={{
+                    width: `${((activeIndex + 1) / Math.max(1, games.length)) * 100}%`,
+                  }}
+                />
+              </div>
+
+              <div className="flex items-center justify-center text-[10px] text-zinc-500">
+                <span>← SCROLL OR SWIPE TO EXPLORE TITLES →</span>
+              </div>
+            </div>
           </motion.div>
         )}
       </AnimatePresence>
     </div>
   );
 }
+
+

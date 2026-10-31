@@ -65,7 +65,7 @@ export function Navbar({ onQuickBook: _onQuickBook }: { onQuickBook?: () => void
                 boxShadow: '0 0 20px rgba(232,25,44,0.4)',
               }}
             >
-              <img src="/logo.png" alt="SB-MAX" className="w-5 h-5 sm:w-7 sm:h-7 object-cover rounded-sm" />
+              <img src="/logo.png" alt="SB-MAX" className="w-6 h-6 sm:w-8 sm:h-8 object-cover rounded-sm" />
               <div className="absolute inset-0 border border-red-400/30 pointer-events-none" />
             </div>
 

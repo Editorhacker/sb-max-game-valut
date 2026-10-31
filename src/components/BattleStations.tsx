@@ -74,7 +74,7 @@ export function BattleStations({ onSelectStation }: StationProps) {
   const [activeTab, setActiveTab] = useState(0);
 
   return (
-    <section id="stations" className="py-14 sm:py-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto relative">
+    <section id="stations" className="py-12 sm:py-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto relative">
       {/* Section Header */}
       <div className="mb-10 sm:mb-14">
         <div className="flex items-center gap-2 mb-2 sm:mb-3">

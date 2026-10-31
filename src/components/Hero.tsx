@@ -1,7 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
-import { motion, useMotionValue, useTransform } from 'framer-motion';
-import {  ShieldCheck, Flame, Sparkles,  } from 'lucide-react';
-import { games } from '../data/games';
+import { motion, useMotionValue } from 'framer-motion';
+import {   Flame, Sparkles  } from 'lucide-react';
 
 
 
@@ -19,11 +18,6 @@ export function Hero( ) {
   // 3D Parallax mouse tracking
   const mouseX = useMotionValue(0);
   const mouseY = useMotionValue(0);
-
-  const rotateX = useTransform(mouseY, [-300, 300], [6, -6]);
-  const rotateY = useTransform(mouseX, [-300, 300], [-6, 6]);
-  const charX = useTransform(mouseX, [-400, 400], [-10, 10]);
-  const charY = useTransform(mouseY, [-400, 400], [-10, 10]);
 
   useEffect(() => {
     // Only track mouse parallax on devices with fine pointer (non-touch)
@@ -160,7 +154,7 @@ export function Hero( ) {
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.1 }}
-              className="font-display text-4xl min-[420px]:text-5xl sm:text-7xl lg:text-8xl font-black italic uppercase tracking-tight text-white leading-[0.92] mb-4 sm:mb-5"
+              className="font-display text-5xl min-[420px]:text-6xl sm:text-7xl lg:text-8xl font-black italic uppercase text-white leading-[0.92] mb-4 sm:mb-5 text-center"
             >
               LOCK YOUR <br />
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#e8192c] via-[#ff5722] to-[#ffd700] drop-shadow-[0_0_35px_rgba(232,25,44,0.6)]">
@@ -186,116 +180,11 @@ export function Hero( ) {
             {/* Quick Interactive Station Booker Card */}
             
 
-            {/* Quick stats below hero */}
-            <div className="mt-6 sm:mt-8 grid grid-cols-3 gap-2 sm:gap-4 pt-4 sm:pt-6 border-t border-white/10 text-center sm:text-left">
-              <div>
-                <span className="font-display text-2xl sm:text-4xl font-black italic text-red-500 block leading-none">
-                  24
-                </span>
-                <span className="font-mono text-[10px] sm:text-xs text-zinc-400 uppercase tracking-wider">
-                  Battle Rigs
-                </span>
-              </div>
-              <div>
-                <span className="font-display text-2xl sm:text-4xl font-black italic text-cyan-400 block leading-none">
-                  {games.length}+
-                </span>
-                <span className="font-mono text-[10px] sm:text-xs text-zinc-400 uppercase tracking-wider">
-                  Pre-Loaded
-                </span>
-              </div>
-              <div>
-                <span className="font-display text-2xl sm:text-4xl font-black italic text-amber-400 block leading-none">
-                  360Hz
-                </span>
-                <span className="font-mono text-[10px] sm:text-xs text-zinc-400 uppercase tracking-wider">
-                  QD-OLED
-                </span>
-              </div>
-            </div>
+           
 
           </div>
 
-          {/* Right Column: 3D CYBER SAMURAI WARRIOR CHARACTER */}
-          <div className="lg:col-span-5 relative flex items-center justify-center mt-6 lg:mt-0">
-
-            {/* Glowing neon halo behind character */}
-            <motion.div
-              style={{ rotateX, rotateY }}
-              className="relative w-full max-w-[320px] sm:max-w-[420px] aspect-[3/4] flex items-center justify-center"
-            >
-              {/* Outer cyber ring */}
-              <div className="absolute inset-0 rounded-2xl border-2 border-red-500/30 shadow-[0_0_50px_rgba(232,25,44,0.3)] animate-pulse" />
-              <div className="absolute -inset-3 sm:-inset-4 rounded-3xl border border-cyan-500/20 pointer-events-none" />
-
-              {/* Character Render Container */}
-              <motion.div
-                style={{ x: charX, y: charY }}
-                className="relative w-full h-full rounded-xl overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.9)] group"
-              >
-                {/* Character Image */}
-                <img
-                  src="/cyber-character.jpg"
-                  alt="Cyber Samurai Gaming Warrior"
-                  className="w-full h-full object-cover object-center filter contrast-110 saturate-125 group-hover:scale-105 transition-transform duration-700 ease-out"
-                />
-
-                {/* Cyber HUD Overlays on Character */}
-                <div className="absolute inset-0 bg-gradient-to-t from-[#03040a] via-transparent to-black/20" />
-
-                {/* Floating holographic badge 1: Top Right */}
-                <motion.div
-                  animate={{ y: [-3, 3, -3] }}
-                  transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }}
-                  className="absolute top-3 sm:top-5 right-3 sm:right-5 p-2 sm:p-2.5 bg-black/85 backdrop-blur-md border border-red-500/60 shadow-[0_0_20px_rgba(232,25,44,0.4)] text-left"
-                  style={{
-                    clipPath: 'polygon(0 0, calc(100% - 6px) 0, 100% 6px, 100% 100%, 6px 100%, 0 calc(100% - 6px))',
-                  }}
-                >
-                  <div className="flex items-center gap-1.5 text-red-400 font-mono text-[9px] sm:text-[10px] font-bold">
-                    <span className="w-1.5 h-1.5 rounded-full bg-red-500 animate-ping" />
-                    KATANA PROTOCOL
-                  </div>
-                  <div className="font-display text-xs sm:text-sm font-black italic text-white uppercase">
-                    360Hz TOURNAMENT RIG
-                  </div>
-                </motion.div>
-
-                {/* Floating holographic badge 2: Bottom Left */}
-                <motion.div
-                  animate={{ y: [3, -3, 3] }}
-                  transition={{ duration: 3.5, repeat: Infinity, ease: 'easeInOut', delay: 0.5 }}
-                  className="absolute bottom-4 sm:bottom-6 left-3 sm:left-5 p-2 sm:p-3 bg-black/85 backdrop-blur-md border border-cyan-500/60 shadow-[0_0_20px_rgba(0,212,255,0.3)] text-left max-w-[85%]"
-                  style={{
-                    clipPath: 'polygon(0 0, calc(100% - 6px) 0, 100% 6px, 100% 100%, 6px 100%, 0 calc(100% - 6px))',
-                  }}
-                >
-                  <span className="text-[9px] sm:text-[10px] font-mono text-cyan-400 block font-semibold">
-                    STATION SPECS // POD 01
-                  </span>
-                  <div className="font-display text-sm sm:text-base font-black italic text-white uppercase leading-none mt-0.5 truncate">
-                    RTX 4090 • 24GB VRAM
-                  </div>
-                  <div className="font-mono text-[9px] sm:text-[11px] text-emerald-400 mt-1 flex items-center gap-1">
-                    <ShieldCheck className="w-3 h-3 flex-shrink-0" /> 0.8ms SERVER PING
-                  </div>
-                </motion.div>
-
-                {/* Animated Scan Line */}
-                <motion.div
-                  className="absolute inset-0 bg-gradient-to-b from-transparent via-red-500/10 to-transparent pointer-events-none"
-                  animate={{ y: ['-100%', '200%'] }}
-                  transition={{ duration: 2.8, repeat: Infinity, ease: 'linear' }}
-                />
-              </motion.div>
-
-              {/* Decorative Corner Brackets */}
-              <div className="absolute -top-2 -left-2 sm:-top-3 sm:-left-3 w-6 sm:w-8 h-6 sm:h-8 border-t-2 border-l-2 border-red-500" />
-              <div className="absolute -bottom-2 -right-2 sm:-bottom-3 sm:-right-3 w-6 sm:w-8 h-6 sm:h-8 border-b-2 border-r-2 border-cyan-400" />
-            </motion.div>
-
-          </div>
-
+          
         </div>
       </div>
     </section>

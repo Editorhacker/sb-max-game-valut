@@ -9,9 +9,10 @@ interface GameCardProps {
   game: Game;
   onClick: (game: Game) => void;
   index: number;
+  className?: string;
 }
 
-export function GameCard({ game, onClick, index }: GameCardProps) {
+export function GameCard({ game, onClick, index, className = '' }: GameCardProps) {
   const [imgError, setImgError] = useState(false);
   const [hovered, setHovered] = useState(false);
   const rig = getCafeRigInfo(game);
@@ -36,19 +37,20 @@ export function GameCard({ game, onClick, index }: GameCardProps) {
         sfx.playHover();
       }}
       onMouseLeave={() => setHovered(false)}
-      className="relative bg-[#0d0f1a] border border-white/10 hover:border-red-500/70 transition-all duration-300 flex flex-col group cursor-pointer overflow-hidden shadow-[0_10px_25px_rgba(0,0,0,0.6)] hover:shadow-[0_0_35px_rgba(232,25,44,0.3)] hover:-translate-y-2"
+      className={`relative bg-[#0d0f1a] border border-white/10 hover:border-red-500/70 transition-all duration-300 flex flex-col group cursor-pointer overflow-hidden shadow-[0_10px_25px_rgba(0,0,0,0.6)] hover:shadow-[0_0_35px_rgba(232,25,44,0.3)] hover:-translate-y-2 h-full select-none ${className}`}
       style={{
         clipPath: 'polygon(0 0, calc(100% - 14px) 0, 100% 14px, 100% 100%, 14px 100%, 0 calc(100% - 14px))',
       }}
     >
       {/* 2:3 Vertical Poster Container */}
-      <div className="relative aspect-[2/3] w-full overflow-hidden bg-black/60 flex-shrink-0">
+      <div className="relative aspect-[2/3] w-full overflow-hidden bg-black/60 flex-shrink-0 select-none">
         <motion.img
           src={posterUrl}
           alt={game.title}
           loading="lazy"
+          draggable={false}
           onError={() => setImgError(true)}
-          className="w-full h-full object-cover object-center filter contrast-110 group-hover:scale-108 transition-transform duration-600 ease-out"
+          className="w-full h-full object-cover object-center filter contrast-110 group-hover:scale-108 transition-transform duration-600 ease-out pointer-events-none select-none"
         />
 
         {/* Cinematic gradient overlay */}
